@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Page Title</title>
+<style>
+    body { margin: 0; }
+    #wrap { margin: 0 auto; }
+    #List { margin: 0 auto; height: 600px; width: 80%; border: 1px solid; border-spacing:0px; }
+</style>
+</head>
+<body>
+    <script language="javascript">
+        var f = {
+            oo : function(tag){
+                 if (tag == '' || tag == undefined || tag.indexOf('>') == -1) { return; }
+                 if (tag.indexOf('>') > -1){ 
+					var a = b = c = d = e = g = null;
+ 	                var oTag = tag.split('>'); 
+                    oTag.forEach(function(t){ 
+						if (t.replace(/ /g,'') == 'body') {
+							b = document.body;
+							if (t.indexOf('.attr')>-1){  
+								b = f.atr(b, eval('c = '+ t.split('.attr')[1].replace(/ /g,'')), 0); 
+							}
+						}
+						else { 
+                            if (t.indexOf('=')>-1){ 
+                                t.split('=').forEach(function(s){
+									c = d = e = g = null;
+									if (s.indexOf('.attr')>-1){
+										d = s.split('.attr')[0].replace(/ /g,''); 
+										e = s.split('.attr')[1].replace(/ /g,''); 
+											eval('c = '+ e);	 
+										g = (d.indexOf('(')>-1)?'a = f.els(c, b, "' + d.split('(')[0].replace(/ /g,'') + '", '+ d.split('(')[1].replace(/ /g,''):'a = f.els(c, b, "' + d + '", 0, 1)'; 
+									} else {
+										g = (s.indexOf('(')>-1)?'a = f.els(null, b, "' + s.split('(')[0].replace(/ /g,'') + '", '+ s.split('(')[1].replace(/ /g,''):'a = f.els(null, b, "' + s.replace(/ /g,'') + '", 0, 1)'; 
+									} 
+									eval(g); 
+                                });
+                                b = a;
+                            } else {
+								c = d = e = g = null;
+								if (t.indexOf('.attr')>-1){
+									d = t.split('.attr')[0].replace(/ /g,''); 
+									e = t.split('.attr')[1].replace(/ /g,''); 
+										eval('c = '+ e);	 
+									g = (d.indexOf('(')>-1)?'a = f.els(c, b, "' + d.split('(')[0].replace(/ /g,'') + '", '+ d.split('(')[1].replace(/ /g,''):'a = f.els(c, b, "' + d + '", 0, 1)';
+								} else {
+									g = (t.indexOf('(')>-1)?'a = f.els(null, b, "' + t.split('(')[0].replace(/ /g,'') + '", '+ t.split('(')[1].replace(/ /g,''):'a = f.els(null, b, "' + t.replace(/ /g,'') + '", 0, 1)'; 
+								}
+								eval(g); 
+								b = a;								
+                            } 
+                        }
+                    });
+                 } 
+            },
+			atr: function(oTag, json, r){
+				if (typeof(json)=='object'){
+					for(var j in json){
+						if (json.hasOwnProperty(j)) {
+							if (typeof(json[j]) == 'object'){
+								if (json[j][r] != undefined){
+									oTag.setAttribute(j, json[j][r].replace(/ /g,'').replace(/,/g,' ')); 
+								} 
+							} else {
+								oTag.setAttribute(j, json[j].replace(/ /g,'').replace(/,/g,' ')); 
+							} 
+						} 
+					}        
+				}
+				return oTag;
+			},
+            els: function (jdata, b, t, l, r){
+                var rtg = null;
+                if (b == null || b == undefined){return;}
+                if (b.tagName == 'BODY'){
+                    for(var i = 0; i < r; i++){   
+						rtg = f.atr(document.createElement(t.replace(/ /g,'')), jdata, i);  
+                        b.appendChild(rtg);  
+                    } 
+                } else {
+                    var to = null;
+                    b.parentNode.childNodes.forEach(function(n, p){
+                        if (n.tagName != 'SCRIPT' && n.tagName != undefined){
+                            if (p == l){ to = n; }
+                        } else { l = l + 1; }
+                    });   
+                    if (to != null){ 
+                        for(var i = 0; i < r; i++){   
+							rtg = f.atr(document.createElement(t.replace(/ /g,'')), jdata, i);
+                            to.appendChild(rtg);
+                        }  
+                    }
+                }
+                return rtg;
+            },  
+            insert: function(o, e){
+                o.insertBefore(e, o.childNodes[0]); 
+            },
+            append: function(o, e){
+            	o.appendChild(e); 
+            }
+
+        };
+
+        // location, count
+		var t = 'body >'+
+				'div(0,1).attr({"id": ["wrap"] }) >'+
+				'table.attr({"id": "List"}) >'+
+				'thead = tbody.attr({"id": "tbody"}) > '+
+				'tr(0,1) >'+
+				'th(0,4).attr({"scope": "col", "id": ["hidx", "htitle", "hwriter", "hregdate"] })';
+			f.oo(t);
+			
+			document.getElementById("hidx").innerText = "번호";
+			document.getElementById("htitle").innerText = "제목";
+			document.getElementById("hwriter").innerText = "작성자";
+			document.getElementById("hregdate").innerText = "작성일시";
+
+          
+    </script>     
+</body>
+</html>
+ 
+
+ 
